@@ -33,6 +33,7 @@ public class NoodleRepo {
         return (int)noodle_Id;
     }
 
+
     public void delete(int noodle_Id){
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
         db.delete(Noodle.TABLE, Noodle.KEY_ID + "=?", new String[]{ String.valueOf(noodle_Id)});
@@ -53,7 +54,13 @@ public class NoodleRepo {
 
     public ArrayList<HashMap<String, String>> getNoodleList(){
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        String selectQuery = "SELECT " + Noodle.KEY_ID + "," + Noodle.KEY_name + "," + Noodle.KEY_rank + "," + Noodle.KEY_comment + "," + Noodle.KEY_date + "," + Noodle.KEY_image + " FROM " + Noodle.TABLE;
+        String selectQuery = "SELECT " + Noodle.KEY_ID + "," +
+                Noodle.KEY_name + "," +
+                Noodle.KEY_rank + "," +
+                Noodle.KEY_comment + "," +
+                Noodle.KEY_date + "," +
+                Noodle.KEY_image +
+                " FROM " + Noodle.TABLE;
 
         ArrayList<HashMap<String, String>> noodleList = new ArrayList<HashMap<String, String>>();
 

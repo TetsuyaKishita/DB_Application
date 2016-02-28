@@ -14,6 +14,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,8 @@ public class TopListActivity extends Activity implements View.OnClickListener {
     DBOpenHelper dbOpenHelper;
 
     ListView noodleList;
+
+    NoodleRepo repo = new NoodleRepo(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,37 @@ public class TopListActivity extends Activity implements View.OnClickListener {
                 cursor,
                 new String[]{"name", "id"},
                 new int[]{R.id.noodle_name, R.id.noodle_Id}, 0));
+
+        noodleList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListView listView = (ListView) parent;
+                String item = (String) listView.getItemAtPosition(position);
+                System.out.print(item);
+
+                //repo.delete(id);
+                System.out.print("delete");
+                Toast.makeText(TopListActivity.this, "select event", Toast.LENGTH_SHORT).show();
+
+                class SampleListItemClickListener implements ListView.OnItemClickListener {
+
+                    private final TextView textView;
+
+                    SampleListItemClickListener(TextView titleView) {
+                        this.textView = titleView;
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ListView listView = (ListView) parent;
+                        String item = (String) listView.getItemAtPosition(position);
+                        Toast.makeText(TopListActivity.this, item, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
     }
 
     @Override
@@ -61,13 +95,13 @@ public class TopListActivity extends Activity implements View.OnClickListener {
         dbOpenHelper = new DBOpenHelper(TopListActivity.this);
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("select name _id, * from Noodle", null);
+        Cursor cursor = db.rawQuery("select name _id, rank _id, comment _id, * from Noodle", null);
         noodleList = (ListView) findViewById(R.id.list);
         noodleList.setAdapter(new SimpleCursorAdapter(this,
                 R.layout.view_entry,
                 cursor,
-                new String[]{"name", "id"},
-                new int[]{R.id.noodle_name, R.id.noodle_Id}, 0));
+                new String[]{"name",  "id", "rank", "comment"},
+                new int[]{R.id.noodle_name, R.id.noodle_Id, R.id.noodle_rank, R.id.noodle_comment}, 0));
     }
 
     @Override
@@ -76,7 +110,9 @@ public class TopListActivity extends Activity implements View.OnClickListener {
             case R.id.input:
                 Intent intent = new Intent(TopListActivity.this, InputActivity.class);
                 startActivity(intent);
-                break;
+
+            case R.id.list:
+                Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
         }
     }
 }
