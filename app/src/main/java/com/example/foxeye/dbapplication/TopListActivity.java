@@ -21,7 +21,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TopListActivity extends Activity implements View.OnClickListener {
+import static android.widget.Toast.*;
+
+public class TopListActivity extends Activity {
 
     Button INPUT;
     Button CAMERA;
@@ -38,50 +40,28 @@ public class TopListActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        this.INPUT = (Button)findViewById(R.id.input);
-        this.INPUT.setOnClickListener(this);
-
         dbOpenHelper = new DBOpenHelper(TopListActivity.this);
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("select name _id, * from Noodle", null);
+        /*Cursor cursor = db.rawQuery("select name _id, * from Noodle", null);
         noodleList = (ListView) findViewById(R.id.list);
         noodleList.setAdapter(new SimpleCursorAdapter(this,
                 R.layout.view_entry,
                 cursor,
                 new String[]{"name", "id"},
-                new int[]{R.id.noodle_name, R.id.noodle_Id}, 0));
+                new int[]{R.id.noodle_name, R.id.noodle_Id}, 0));*/
 
-        noodleList.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        Button inputButton = (Button) findViewById(R.id.input);
+        inputButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListView listView = (ListView) parent;
-                String item = (String) listView.getItemAtPosition(position);
-                System.out.print(item);
+            public void onClick(View v) {
+                Intent intent = new Intent(TopListActivity.this, InputActivity.class);
+                startActivity(intent);
 
-                //repo.delete(id);
-                System.out.print("delete");
-                Toast.makeText(TopListActivity.this, "select event", Toast.LENGTH_SHORT).show();
-
-                class SampleListItemClickListener implements ListView.OnItemClickListener {
-
-                    private final TextView textView;
-
-                    SampleListItemClickListener(TextView titleView) {
-                        this.textView = titleView;
-                    }
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        ListView listView = (ListView) parent;
-                        String item = (String) listView.getItemAtPosition(position);
-                        Toast.makeText(TopListActivity.this, item, Toast.LENGTH_LONG).show();
-                    }
-                }
+                Toast.makeText(TopListActivity.this, "test", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     @Override
@@ -89,31 +69,43 @@ public class TopListActivity extends Activity implements View.OnClickListener {
         super.onResume();
         setContentView(R.layout.activity_list);
 
-        this.INPUT = (Button)findViewById(R.id.input);
-        this.INPUT.setOnClickListener(this);
-
         dbOpenHelper = new DBOpenHelper(TopListActivity.this);
         SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("select name _id, rank _id, comment _id, * from Noodle", null);
+        Cursor cursor = db.rawQuery("select id _id, name _id, rank _id, comment _id, * from Noodle", null);
         noodleList = (ListView) findViewById(R.id.list);
         noodleList.setAdapter(new SimpleCursorAdapter(this,
                 R.layout.view_entry,
                 cursor,
-                new String[]{"name",  "id", "rank", "comment"},
+                new String[]{"name", "id", "rank", "comment"},
                 new int[]{R.id.noodle_name, R.id.noodle_Id, R.id.noodle_rank, R.id.noodle_comment}, 0));
-    }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.input:
+        Button inputButton = (Button) findViewById(R.id.input);
+        inputButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(TopListActivity.this, InputActivity.class);
                 startActivity(intent);
+            }
+        });
 
-            case R.id.list:
-                Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
-        }
+        noodleList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(TopListActivity.this, DetailActivity.class);
+                Cursor selectedItem = (Cursor) noodleList.getItemAtPosition(position);
+
+                int lgin_id = selectedItem.getInt(selectedItem.getColumnIndex("id"));
+                String lgin_name = selectedItem.getString(selectedItem.getColumnIndex("name"));
+
+                intent.putExtra(lgin_name, lgin_id);
+
+                startActivity(intent);
+                //Toast.makeText(TopListActivity.this, "test", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
 

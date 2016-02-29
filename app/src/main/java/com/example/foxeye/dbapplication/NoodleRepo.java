@@ -9,9 +9,6 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by foxeye on 2016/02/05.
- */
 public class NoodleRepo {
     private DBOpenHelper dbOpenHelper;
 
