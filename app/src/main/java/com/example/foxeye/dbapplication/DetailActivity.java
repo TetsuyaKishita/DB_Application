@@ -23,9 +23,10 @@ public class DetailActivity extends AppCompatActivity {
         db = (new DBOpenHelper(this)).getReadableDatabase();
 
         Intent intent = getIntent();
-        String strData = intent.getStringExtra("name");
-        //int intData = intent.getIntExtra("name", 1);
-        String sql = "SELECT name, rank, comment FROM Noodle WHERE id = " + strData;
+        Bundle bundle = intent.getExtras();
+        int id = bundle.getInt("KEY");
+
+        String sql = "SELECT name, rank, comment FROM Noodle WHERE id = " + id;
         Cursor cursor = db.rawQuery(sql, null);
 
         while (cursor.moveToNext()){

@@ -103,7 +103,7 @@ public class NoodleRepo {
                 noodle.rank = cursor.getInt(cursor.getColumnIndex(Noodle.KEY_rank));
                 noodle.comment = cursor.getString(cursor.getColumnIndex(Noodle.KEY_comment));
                 noodle.date = cursor.getInt(cursor.getColumnIndex(Noodle.KEY_date));
-                noodle.image = cursor.getString(cursor.getColumnIndex(Noodle.KEY_image));
+                noodle.image = cursor.getBlob(cursor.getColumnIndex(Noodle.KEY_image));
 
             }while (cursor.moveToNext());
         }

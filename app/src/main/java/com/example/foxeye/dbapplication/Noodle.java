@@ -17,6 +17,6 @@ public class Noodle implements Serializable {
     public int rank;
     public String comment;
     public int date;
-    public String image;
+    public byte[] image;
 
 }
